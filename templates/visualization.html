@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style>
+    .navbar{
+    margin-bottom: 0px;
+    }
+    body {
+      font: 20px Montserrat, sans-serif;
+      line-height: 1.8;
+      color: #f5f6f7;
+    }
+    p{
+      color: black;
+      font: 16px;
+      text-align: center;
+    }
+    footer {
+      position: fixed;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      margin-top: 50px;
+      padding-top: 20px;
+      padding-bottom: 20px;
+      background-color: #f8f8f8;;
+      color: grey;
+      text-align: center;
+    }
+    /* unvisited link */
+    a:link {
+        color: #43967F;
+    }
+    /* visited link */
+    a:visited {
+        color: #277E66;
+    }
+    /* mouse over link */
+    a:hover {
+        color: #5BC6A9;
+    }
+
+    h1{
+      margin-top: 100px;
+    }
+
+    iframe{
+      width: 80%;
+      display: block;
+      margin: auto;
+      margin-bottom: 100px;
+      margin-top: 100px;
+    }
+
+    img{
+      display: block;
+      margin: auto;
+    }
+
+    .tableauPlaceholder{
+      width: 80%;
+      display: block;
+      margin-bottom: 100px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="{{ url_for('home') }}">HOME</a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="{{ url_for('introduction') }}">INTRODUCTION</a></li>
+          <li><a href="{{ url_for('visualization') }}">ANALYSIS AND VISUALIZATION</a></li>
+          <li><a href="{{ url_for('prediction') }}">APPLICATION</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+<div class="jumbotron text-center" style="background-color:rgb(23, 167, 250); height: 650px;">
+  <h1 style="color: white; font-size: 100px;"><img style = "display: inline; width: 10%; height: 10%; margin-right: 35px;" src="https://image.ibb.co/ixbMjf/kisspng-dog-breed-pet-sitting-computer-icons-dogs-vector-5ad7c735912387-3076663115240906775945.png" alt="logo">Analysis & Visualization</h1>
+  <h3 style="color: white;">Dog Breed Classification Project</h3>
+</div>
+
+<p>Correlation matrix</p>
+<img src="https://preview.ibb.co/g8Dj3n/null_heatmap.png" alt="null_heatmap" border="0">
+
+<hr>
+<p>Profit percentage visualization</p>
+<img src="https://preview.ibb.co/hAZP3n/Screen_Shot_2018_05_01_at_1_27_54_AM.png" alt="Screen_Shot_2018_05_01_at_1_27_54_AM" border="0">
+  <hr>
+<p>Top Directors</p>
+<p>Directors with the highest grossing movies</p>
+<iframe src="https://plot.ly/~KhuyenCao/6/.embed"
+        height="600" width="100%"
+        scrolling="no" seamless="seamless"
+        frameBorder="0">
+</iframe>
+<hr>
+
+<p>Top Main Actor/Actresses (1)</p>
+<p>Actors/Actresses with the highest grossing movies</p>
+<iframe src="https://plot.ly/~KhuyenCao/14/.embed"
+        height="600" width="100%"
+        scrolling="no" seamless="seamless"
+        frameBorder="0">
+</iframe>
+<hr>
+
+<p>Top Main Actor/Actresses (2)</p>
+<p>Actors/Actresses with the highest grossing movies</p>
+<iframe src="https://plot.ly/~KhuyenCao/10/.embed"
+        height="600" width="100%"
+        scrolling="no" seamless="seamless"
+        frameBorder="0">
+</iframe>
+<hr>
+
+<p>Top Main Actor/Actresses (3)</p>
+<p>Actors/Actresses with the highest grossing movies</p>
+<iframe src="https://plot.ly/~KhuyenCao/12/.embed"
+        height="600" width="100%"
+        scrolling="no" seamless="seamless"
+        frameBorder="0">
+</iframe>
+<hr>
+
+<p>Correlation between different features in relation to gross in foreign movies</p>
+<iframe src="https://plot.ly/~KhuyenCao/4/.embed"
+        height="600" width="100%"
+        scrolling="no" seamless="seamless"
+        frameBorder="0">
+</iframe>
+<hr>
+<!--this is code given by tableau-->
+<p>Title Year vs iMDB Score</p>
+<p>Shows public reception to movies over time</p>
+<div class='tableauPlaceholder' id='viz1525033821870' style = "height:600; width: 70%;">>
+  <noscript><a href='#'>
+    <img alt='Title Year vs. iMDB Score ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Mo&#47;MovieData_25&#47;Sheet2&#47;1_rss.png' style='border: none' /></a>
+  </noscript><object class='tableauViz'  style='display:none;'>
+    <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> 
+    <param name='site_root' value='' /><param name='name' value='MovieData_25&#47;Sheet2' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Mo&#47;MovieData_25&#47;Sheet2&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='filter' value='publish=yes' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1525033821870');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
+
+
+<!-- Footer -->
+<footer class="container-fluid bg-4 text-center">
+  <span>Designed by: Khuyen Cao, Trang Ha, Lanhan Mao, Steven Viola, Daniel Wivagg </span>
+  <div class="footer-copyright py-3 text-center">
+      © 2018 Copyright:
+      <a href="https://github.com/ML-Fall18-DogBreed/WebApp"> Github </a>
+  </div>
+</footer>
+</body>
+
+</html>
