@@ -10,18 +10,25 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <style>
     .navbar{
-    margin-bottom: 0px;
+        margin-bottom: 0px;
+        position: fixed;
+        width: 100%;
     }
     body {
       font: 20px Montserrat, sans-serif;
       line-height: 1.8;
       color: #f5f6f7;
     }
-    p{
+    p, ul, ol{
       color: black;
-      font: 16px;
-      text-align: center;
+      {#text-align: center;#}
     }
+    #bodydiv {
+        font-size: 14px;
+        padding-left: 100px;
+        padding-right: 100px;
+    }
+
     footer {
       {#position: fixed;#}
       right: 0;
@@ -69,7 +76,24 @@
       display: block;
       margin-bottom: 100px;
     }
+    .scroll {
+        content: url("../static/scroll.png");
+    }
+
+    .scroll:hover {
+        cursor: pointer;
+    }
+
   </style>
+    <script>
+    $(document).ready(function() {
+        var scrollBottom = $(window).height();
+        $(".scroll").on('click', function() {
+            console.log('hello');
+            $('html, body').animate({scrollTop: scrollBottom}, 1000, 'swing');
+        });
+    });
+    </script>
 </head>
 <body>
 
@@ -97,94 +121,96 @@
   <div class="jumbotron text-center" style="background-color:rgb(23, 167, 250); height: 650px;">
     <h1 style="color: white; font-size: 100px;"><img style = "display: inline; width: 10%; height: 10%; margin-right: 35px;" src="https://image.ibb.co/ixbMjf/kisspng-dog-breed-pet-sitting-computer-icons-dogs-vector-5ad7c735912387-3076663115240906775945.png" alt="logo">Analysis & Visualization</h1>
     <h3 style="color: white;">Dog Breed Classification Project</h3>
+      <br><br>
+      <a class="scroll"></a>
   </div>
 
-  <p>Decision Tree Models</p>
+  <div id="bodydiv">
+      <h3 style="color: black;">Feature Extraction Methods</h3>
 
-  <img src="../static/decision-tree.PNG" width="55%">
+      <p>Before exploring the machine learning models, we first decided on various feature extractors used to train these models. The feature extractors we used are:
+          <ol>
+          <li>Image pixels</li>
+          <li>VGG16 features</li>
+          <li>ResNet50 features</li>
+          <li>Histogram of Oriented Gradients</li>
+      </ol></p>
 
-  <p>Adaptive Boosting</p>
+      <p><strong>Pixels</strong></p>
+      <p>We started with image pixels because they are the simplest features to extract and many models are able to extract all of the information from these pixels alone. This feature set is more suitable for complex models.</p>
 
-  <img src="../static/adaboost.PNG" width="52%">
+      <p><strong>VGG16 features</strong></p>
+      <p>The VGG16 is a pre-trained neural network that was used for image classification of over 1000 different classes. We stripped off the classification part (last few layers) and utilized the output as our feature vector. This vector consisted of 7x7x512 output layer which was converted into a feature vector. We expected this pre-trained model to perform better because it knows what features are important in an image for different object classification. It does however contain many features that are not dog related because of its initial classification task.</p>
+      <img src="../static/vgg16Pic.PNG" width="45%"/>
 
-  <p>Stochastic Gradient Descent</p>
+      <p><strong>ResNet50 features</strong></p>
+      <p>ResNet50 was similarly a pre-trained neural network but it consisted of a very different architecture to achieve similar performance on the ImageNet object classification task. This model is deeper but with fewer fully connected layers resulting in an overall smaller model with faster test image processing.</p>
+
+      <p><strong>Histogram of Oriented Gradients</strong></p>
+      <p>Histogram of gradients is a feature extractor that utilizes the gradients of a grayscale image to form a feature vector. These gradients are calculated by first finding all of the gradient directions at each pixel. These gradients are then combined within a sliding window of 4, 8x8 pixel regions. Inside these regions, the histogram of the gradient directions, magnitudes is calculated and forms the feature vector. This encodes shape information and is robust to image noise.</p>
+      <img src="../static/HOGPic.PNG" width="65%"/>
+
+      <h3 style="color: black;">Models</h3>
+      <p>Using each of these feature vectors, we passed them through the following series of classifiers.</p>
+      <ol>
+          <li>K-Nearest-Neighbor</li>
+          <li>Decision Trees</li>
+          <li>AdaBoost</li>
+          <li>Stochastic Gradient Descent</li>
+          <li>Support Vector Machine</li>
+          <li>Convolutional Neural Network (from scratch)</li>
+          <li>Boosted Convolutional Neural Network</li>
+      </ol>
+
+      <p><strong>K-Nearest-Neighbor</strong></p>
+      <p>We started with this basic classifier to see if our dataset was easily clustered into the different breeds. As expected however, this model performed very poorly. This was because each feature vector contained many background features which was true for all feature extractors. Many images contained people in the foreground or background, and some images included multiple dogs of the same breed. This made this simple classifier perform about the same as randomly guessing.</p>
+
+      <p><strong>Decision Trees</strong></p>
+      <p>The next model was the slightly more complex decision tree model. This was tried with the various feature extractors and with varying depths. This approach seemed promising initially with a decision tree of depth 120 reaching a test accuracy of around 13%. Adding additional depths did not increase the results beyond this 13%. </p>
+      <img src="../static/decision-tree.PNG" width="55%">
+
+      <p><strong>Adaptive Boosting</strong></p>
+      <p>With the promising results from the decision trees we tried using Adaboost on decision tree stubs to augment their results. We used a variety of depths ranging from 1 to 100 but our best results were on depth 10 decision trees with an accuracy near 10%. This however was not significantly better than the single decision tree model. This leads us to believe that the decision trees that are formed are not very diverse and are all extracting the same features. Additionally due to computational complexity we were not able to extend beyond 1200 classifiers of depth 2. Less classifiers were used for deeper decision trees due to the training time. </p>
+      <img src="../static/adaboost.PNG" width="52%">
+
+      <p><strong>Stochastic Gradient Descent (SGD)</strong></p>
+      <p>After the failed results with the simpler classifiers we tried to use stochastic gradient descent to learn the separation between all of the breeds. The SGD was able to successfully classify many of the breeds using both the VGG16 features and the HOG features. Surprisingly, the HOG features performed better in this case reaching an accuracy of 77%. We believe this is because the VGG16 feature extractor was trained so all dogs were output as a single class while the rest of the features were used to identify the other 999 classes. This lost many of the complex features required to correctly identify similar dog breeds. This led us to believe that the HOG features may be the best for our classification problem.</p>
 
 
-  <p>Support Vector Machine</p>
+      <p><strong>Support Vector Machine</strong></p>
+      <p>The support vector machine we built was based on Sci-kit learn SVC platform. In order to achieve multi-class classification, we utilized one-versus-rest method thus the SVM will contains 120 different hyperplane classification boundaries to identify the dog breed. We initialized the SVM using both VGG16 descriptor and the HOG descriptor. Unknowing the linearity of either descriptors, we could not determine if the data can be linearly classified or higher degree classification is need. Thus, a grid search with cross validation was implemented in order to find the optimal hyperparameters. These different parameters are:</p>
+      <ul>
+          <li>Different feature descriptor of VGG16 and HOG</li>
+          <li>Different choice of kernels including linear, polynomial and RBF.</li>
+          <li>Different choice of kernels including linear, polynomial and RBF.</li>
+          <li>Different values of penalty parameter C to regularize boundary simplicity. </li>
+          <li>Different values of  kernel coefficient gamma to regularize how much influence a single training instance has over the other instances.</li>
+          <li>Different degrees of polynomial kernels to specify how much generality the boundaries can be.</li>
+          <li>Different regularization weights to stop overfitting. </li>
+      </ul>
+      <p>By exhaustively searching all parameters, the best parameters calculated by validation is using HOG descriptor, RBF kernel, C of 1.0 and gamma of 0.001. The final test score of SVM was 90% accuracy. This confirmed our initial results from the SGD that HOG features were more informative than the VGG16 features without additional tuning.</p>
+      <img src="../static/SVMPic.PNG" width="45%"/>
 
 
-  <p>Convolutional Neural Network</p>
+      <p><strong>Convolutional Neural Network</strong></p>
+      <p>Both Convolutional Neural Networks used data augmentation to artificially enlarge the dataset with image translations, rotations, and scale adjustments. </p>
 
-  <img src="../static/cnn.PNG" width="45%">
+      <p>The CNN we built from scratch consisted of 2 dimensional convolutions where we adjusted the filter size, using the rectified linear unit for activation. After ‘processing’ the images with convolutions, they were placed through a global average pooling layer to flatten the data into one dimension using an average of the detected features. Finally, we fed the resulting parameters through fully connected layers with relu activation once again. These included a dropout rate which randomly selected nodes to ignore every iteration to prevent overfitting. The output layer was 120 nodes, each one representing a category, with softmax activation. We modified the hidden layers, hidden units, epochs, steps per epoch until the optimal model emerged. The optimal model consisted of five convolutional layers with an increasing filter size, followed by two layers of 512 fully connected nodes with 50% dropout rate each. Due to the small amount of data, this model only reached 30% accuracy compared to the others which were all much less.</p>
+      <img src="../static/cnn.PNG" width="45%">
 
+      <p>We also created a CNN boosted with the Inception V3 pre-trained network. This network already recognizes some breeds of dogs, so our goal was to enhance the performance by removing the top layers and adding fully connected layers with the correct number of outputs. One fully connected layer of 512 nodes with 50% dropout and a final softmax layer of 120 fully connected nodes resulted in the best performance; however, the overall results with the pre-trained model were not improving. The model reached about 70% test accuracy consistently, which was much higher than the results yielded by CNN from scratch, but appeared to be slightly overfitting the data as the training loss decreased despite the test loss not decreasing. It may have helped to fine-tune individual layers of the Inception V3 model, but unfortunately due to the large size and long training time of the CNN model, this was not accomplished during the project.</p>
+      <img src="../static/InceptionPlt.PNG" width="45%"/>
 
-{#<p>Correlation matrix</p>#}
-{#<img src="https://preview.ibb.co/g8Dj3n/null_heatmap.png" alt="null_heatmap" border="0">#}
-{##}
-{#<hr>#}
-{#<p>Profit percentage visualization</p>#}
-{#<img src="https://preview.ibb.co/hAZP3n/Screen_Shot_2018_05_01_at_1_27_54_AM.png" alt="Screen_Shot_2018_05_01_at_1_27_54_AM" border="0">#}
-{#  <hr>#}
-{#<p>Top Directors</p>#}
-{#<p>Directors with the highest grossing movies</p>#}
-{#<iframe src="https://plot.ly/~KhuyenCao/6/.embed"#}
-{#        height="600" width="100%"#}
-{#        scrolling="no" seamless="seamless"#}
-{#        frameBorder="0">#}
-{#</iframe>#}
-{#<hr>#}
-{##}
-{#<p>Top Main Actor/Actresses (1)</p>#}
-{#<p>Actors/Actresses with the highest grossing movies</p>#}
-{#<iframe src="https://plot.ly/~KhuyenCao/14/.embed"#}
-{#        height="600" width="100%"#}
-{#        scrolling="no" seamless="seamless"#}
-{#        frameBorder="0">#}
-{#</iframe>#}
-{#<hr>#}
-{##}
-{#<p>Top Main Actor/Actresses (2)</p>#}
-{#<p>Actors/Actresses with the highest grossing movies</p>#}
-{#<iframe src="https://plot.ly/~KhuyenCao/10/.embed"#}
-{#        height="600" width="100%"#}
-{#        scrolling="no" seamless="seamless"#}
-{#        frameBorder="0">#}
-{#</iframe>#}
-{#<hr>#}
-{##}
-{#<p>Top Main Actor/Actresses (3)</p>#}
-{#<p>Actors/Actresses with the highest grossing movies</p>#}
-{#<iframe src="https://plot.ly/~KhuyenCao/12/.embed"#}
-{#        height="600" width="100%"#}
-{#        scrolling="no" seamless="seamless"#}
-{#        frameBorder="0">#}
-{#</iframe>#}
-{#<hr>#}
-{##}
-{#<p>Correlation between different features in relation to gross in foreign movies</p>#}
-{#<iframe src="https://plot.ly/~KhuyenCao/4/.embed"#}
-{#        height="600" width="100%"#}
-{#        scrolling="no" seamless="seamless"#}
-{#        frameBorder="0">#}
-{#</iframe>#}
-{#<hr>#}
-{#<!--this is code given by tableau-->#}
-{#<p>Title Year vs iMDB Score</p>#}
-{#<p>Shows public reception to movies over time</p>#}
-{#<div class='tableauPlaceholder' id='viz1525033821870' style = "height:600; width: 70%;">>#}
-{#  <noscript><a href='#'>#}
-{#    <img alt='Title Year vs. iMDB Score ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Mo&#47;MovieData_25&#47;Sheet2&#47;1_rss.png' style='border: none' /></a>#}
-{#  </noscript><object class='tableauViz'  style='display:none;'>#}
-{#    <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> #}
-{#    <param name='site_root' value='' /><param name='name' value='MovieData_25&#47;Sheet2' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Mo&#47;MovieData_25&#47;Sheet2&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='filter' value='publish=yes' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1525033821870');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>#}
-
+      <p><strong>Conclusions</strong></p>
+      <p>Through comparison of many different machine learning models, we learned more about what model is suitable for which classification task. For our dataset, the simple models provided insights on what features were useful but did not perform well for the task of classification. Because our dataset was very small in comparison to the number of breeds, many of the traditional methods did not perform as well as expected. Our CNN’s did not have enough training data to determine optimal weights without overfitting to the given examples and thus were not able to perform as well as the support vector approach. Additionally we learned that using pre-trained neural nets to create features is a promising approach for small datasets, but it is important to understand what features the model is generating. With additional tuning of the existing feature extractor we expect that we would be able to get CNN to perform better than the HOG + SVM approach. However for the relatively few parameters that needed tuning, the HOG + SVM approach was very successful without as much experimentation. </p>
+    </div>
 
 <!-- Footer -->
 <footer class="container-fluid bg-4 text-center">
   <span>Designed by: Khuyen Cao, Trang Ha, Lanhan Mao, Steven Viola, Daniel Wivagg </span>
   <div class="footer-copyright py-3 text-center">
       © 2018 Copyright:
-      <a href="https://github.com/ML-Fall18-DogBreed/WebApp"> Github </a>
+      <a href="https://github.com/ML-Fall18-DogBreed/"> Github </a>
   </div>
 </footer>
 </body>

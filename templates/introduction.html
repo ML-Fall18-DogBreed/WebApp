@@ -11,6 +11,9 @@
   <style>
     .navbar{
     margin-bottom: 0px;
+        position: fixed;
+        width: 100%;
+        z-index: 100;
     }
     body {
       font: 20px Montserrat, sans-serif;
@@ -19,7 +22,11 @@
     p{
       color: black;
       font: 16px;
-      text-align: center;
+    }
+    #bodydiv {
+        font-size: 14px;
+        padding-left: 100px;
+        padding-right: 100px;
     }
     footer {
       {#position: fixed;#}
@@ -56,7 +63,24 @@
       margin: auto;
       margin-bottom: 200px;
     }
+    .scroll {
+        content: url("../static/scroll.png");
+    }
+
+    .scroll:hover {
+        cursor: pointer;
+    }
+
   </style>
+    <script>
+    $(document).ready(function() {
+        var scrollBottom = $(window).height() - 20;
+        $(".scroll").on('click', function() {
+            console.log('hello');
+            $('html, body').animate({scrollTop: scrollBottom}, 1000, 'swing');
+        });
+    });
+    </script>
 </head>
 <body>
 
@@ -84,32 +108,31 @@
   <div class="jumbotron text-center" style="background-color:rgb(23, 167, 250); height: 600px;">
     <h1 style="color: white; font-size: 100px;"><img style = "width: 10%; height: 10%; margin-right: 35px;" src="https://image.ibb.co/ixbMjf/kisspng-dog-breed-pet-sitting-computer-icons-dogs-vector-5ad7c735912387-3076663115240906775945.png" alt="logo">Introduction</h1>
     <h3 style="color: white;">Dog Breed Classification Project</h3>
+      <br><br>
+      <a class="scroll"></a>
   </div>
 
+    <div id="bodydiv">
+      <div class="col-sm-12" style = "margin-right: 30px;">
+        <h2 style = "text-align: center;">Project Overview</h2>
+          <hr>
+          <p>The project is to build a tool that can recognize the breed of a dog from an image. This idea originated from a Kaggle challenge which provides the data and specifications for the tool. Although the competition has since ended, it is still a worthwhile challenge with practical applications. Our goal was to compare and contrast machine learning models for use in this problem. We tried many approaches to classifying the 120 breeds available in the 10,000 images from the Kaggle challenge. In the Analysis and Visualizations tab of this website, you can find our results.
+          </p>
+    {#    <p>For more information, click <a href="https://docs.google.com/document/d/1nSId_oiiAeBHTQAM8tlB1NWmHz_kwHCWyGRF-7UQX2M/edit?usp=sharing">Read Me</a></p>#}
+        </div>
 
-  <div class="col-sm-12" style = "margin-right: 30px;">
-    <h2 style = "text-align: center;">Project Overview</h2>
-      <hr>
-      <p>The project is to build a tool that can recognize the breed of a dog from an image. This idea originated from a Kaggle challenge which provides the data and specifications for the tool. Although the competition has since ended, it is still a worthwhile challenge with practical applications. The sections below expand on the purpose, prior work and challenges, and plan.
-      </p>
-    <p>For more information, click <a href="https://docs.google.com/document/d/1nSId_oiiAeBHTQAM8tlB1NWmHz_kwHCWyGRF-7UQX2M/edit?usp=sharing">Read Me</a></p>
+          <div class="col-sm-12" style = "margin-bottom: 100px;">
+            <hr>
+            <h2 style = "text-align: center;"> About the Data set</h2>
+          <p> For this project we looked at Kaggle's <a href="https://www.kaggle.com/c/dog-breed-identification/data">Dog Breed Dataset</a>.</p>
+          <p> Below is the dog breeds distribution in our dataset. There are 120 total breeds spread out over about 10,000 images, making for less than 100 images per breed on average. This is a pretty small dataset considering the size of the problem.</p>
+
+          <p style="text-align:center;">
+              <img src="../static/breeds.png" alt="bro" style="width:55%;height:65%;">
+          </p>
+
+        </div>
     </div>
-
-      <div class="col-sm-12" style = "margin-bottom: 100px;">
-        <hr>
-        <h2 style = "text-align: center;"> About the Data set</h2>
-      <p> For this project we looked at <a href="https://www.kaggle.com/c/dog-breed-identification/data">Dog Breed Dataset</a></p>
-      <p> Below is the dog breeds distribution in our dataset.</p>
-
-      <p style="text-align:center;">
-          <img src="../static/breeds.png" alt="bro" style="width:55%;height:65%;">
-      </p>
-      <p>Basic correlation</p>
-      <p style="text-align:center;">
-          <img src="https://preview.ibb.co/g9g43n/pearson_heatmap.png" alt="bro" style="width:50%;height:60%;">
-      </p>
-    </div>
-
 
 
 <!-- Footer -->
