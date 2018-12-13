@@ -87,9 +87,8 @@
   </style>
     <script>
     $(document).ready(function() {
-        var scrollBottom = $(window).height();
+        var scrollBottom = $('#bodydiv').offset().top - ($('.navbar').height() + 15);
         $(".scroll").on('click', function() {
-            console.log('hello');
             $('html, body').animate({scrollTop: scrollBottom}, 1000, 'swing');
         });
     });
@@ -175,6 +174,7 @@
 
       <p><strong>Stochastic Gradient Descent (SGD)</strong></p>
       <p>After the failed results with the simpler classifiers we tried to use stochastic gradient descent to learn the separation between all of the breeds. The SGD was able to successfully classify many of the breeds using both the VGG16 features and the HOG features. Surprisingly, the HOG features performed better in this case reaching an accuracy of 77%. We believe this is because the VGG16 feature extractor was trained so all dogs were output as a single class while the rest of the features were used to identify the other 999 classes. This lost many of the complex features required to correctly identify similar dog breeds. This led us to believe that the HOG features may be the best for our classification problem.</p>
+      <img src="../static/SGD.png" width="60%"/>
 
 
       <p><strong>Support Vector Machine</strong></p>
@@ -190,6 +190,7 @@
       </ul>
       <p>By exhaustively searching all parameters, the best parameters calculated by validation is using HOG descriptor, RBF kernel, C of 1.0 and gamma of 0.001. The final test score of SVM was 90% accuracy. This confirmed our initial results from the SGD that HOG features were more informative than the VGG16 features without additional tuning.</p>
       <img src="../static/SVMPic.PNG" width="45%"/>
+      <img src="../static/SVM.png" width="60%"/>
 
 
       <p><strong>Convolutional Neural Network</strong></p>
@@ -201,6 +202,60 @@
       <p>We also created a CNN boosted with the Inception V3 pre-trained network. This network already recognizes some breeds of dogs, so our goal was to enhance the performance by removing the top layers and adding fully connected layers with the correct number of outputs. One fully connected layer of 512 nodes with 50% dropout and a final softmax layer of 120 fully connected nodes resulted in the best performance; however, the overall results with the pre-trained model were not improving. The model reached about 70% test accuracy consistently, which was much higher than the results yielded by CNN from scratch, but appeared to be slightly overfitting the data as the training loss decreased despite the test loss not decreasing. It may have helped to fine-tune individual layers of the Inception V3 model, but unfortunately due to the large size and long training time of the CNN model, this was not accomplished during the project.</p>
       <img src="../static/InceptionPlt.PNG" width="45%"/>
 
+      <p><strong>Final Results</strong></p>
+      <p>The summarized results from each of the algorithms and feature extractors are summarized below.</p>
+        <style type="text/css">
+        .tg  {border-collapse:collapse;border-spacing:0;border-color:#ccc; color:black;}
+        .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 10px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}
+        .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 10px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;}
+        .tg .tg-c3ow{border-color:inherit;text-align:center;vertical-align:top}
+        .tg .tg-fymr{font-weight:bold;border-color:inherit;text-align:left;vertical-align:top}
+        .tg .tg-7btt{font-weight:bold;border-color:inherit;text-align:center;vertical-align:top}
+        .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+        </style>
+        <table class="tg">
+          <tr>
+            <th class="tg-fymr">Feature Extractor</th>
+            <th class="tg-7btt">Decision Tree</th>
+            <th class="tg-7btt">Adaboost</th>
+            <th class="tg-7btt">K-Means</th>
+            <th class="tg-7btt">SGD</th>
+            <th class="tg-7btt">SVM</th>
+            <th class="tg-7btt">Neural Network</th>
+            <th class="tg-7btt">Boosted CNN</th>
+          </tr>
+          <tr>
+            <td class="tg-0pky">Histogram of Gradients</td>
+            <td class="tg-c3ow">1%</td>
+            <td class="tg-c3ow">2%</td>
+            <td class="tg-c3ow">N/A</td>
+            <td class="tg-c3ow">77%</td>
+            <td class="tg-c3ow">90%</td>
+            <td class="tg-c3ow">N/A</td>
+            <td class="tg-c3ow">N/A</td>
+          </tr>
+          <tr>
+            <td class="tg-0pky">VGG16</td>
+            <td class="tg-c3ow">13%</td>
+            <td class="tg-c3ow">13%</td>
+            <td class="tg-c3ow">3%</td>
+            <td class="tg-c3ow">54%</td>
+            <td class="tg-c3ow">61%</td>
+            <td class="tg-c3ow">3%</td>
+            <td class="tg-c3ow">N/A</td>
+          </tr>
+          <tr>
+            <td class="tg-0pky">Raw Image</td>
+            <td class="tg-c3ow">1.50%</td>
+            <td class="tg-c3ow">3%</td>
+            <td class="tg-c3ow">N/A</td>
+            <td class="tg-c3ow">10%</td>
+            <td class="tg-c3ow">12%</td>
+            <td class="tg-c3ow">39%</td>
+            <td class="tg-c3ow">70%</td>
+          </tr>
+        </table>
+        <br>
       <p><strong>Conclusions</strong></p>
       <p>Through comparison of many different machine learning models, we learned more about what model is suitable for which classification task. For our dataset, the simple models provided insights on what features were useful but did not perform well for the task of classification. Because our dataset was very small in comparison to the number of breeds, many of the traditional methods did not perform as well as expected. Our CNN’s did not have enough training data to determine optimal weights without overfitting to the given examples and thus were not able to perform as well as the support vector approach. Additionally we learned that using pre-trained neural nets to create features is a promising approach for small datasets, but it is important to understand what features the model is generating. With additional tuning of the existing feature extractor we expect that we would be able to get CNN to perform better than the HOG + SVM approach. However for the relatively few parameters that needed tuning, the HOG + SVM approach was very successful without as much experimentation. </p>
     </div>

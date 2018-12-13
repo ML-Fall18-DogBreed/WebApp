@@ -76,7 +76,7 @@
   </style>
     <script>
     $(document).ready(function() {
-        var scrollBottom = $(window).height();
+        var scrollBottom = $('#bodydiv').offset().top - ($('.navbar').height() + 15);
         $(".scroll").on('click', function() {
             console.log('hello');
             $('html, body').animate({scrollTop: scrollBottom}, 1000, 'swing');
@@ -118,7 +118,7 @@
     <h2 style="color:black;">Welcome!</h2>
     <p>This website provides information about our group's CS 539: Machine Learning group project. In this project, we created a set of classifiers to detect the breed of a dog from an input image. Our dataset is visible on the Introduction tab of this website. The results are discussed on the Analysis and Visualization page.</p>
     <p><strong>Source code: Github</strong></p>
-    <p>Our project is hosted on <a href="https://github.com/ML-Fall18-DogBreed/">Github</a> in a set of two repositories. In the 'breed-classifier' repository is everything related to the Convolutional Neural Networks implemented in Python. Follow the README for setup instructions; Keras was used to implement the networks. In the one called 'breed-classifier-SGD', you can find Python scripts for running a variety of other models to varying degrees of accuracy.</p>
+    <p>Our project is hosted on <a href="https://github.com/ML-Fall18-DogBreed/">Github</a> in a set of two repositories. In the 'breed-classifier' repository is everything related to the Convolutional Neural Networks implemented in Python. Follow the README for setup instructions and scroll to the bottom for a detailed chart of most of the network structures that were implemented, with results. In the repository called 'breed-classifier-SGD', you can find Python scripts for running a variety of other models to varying degrees of accuracy.</p>
 </div>
 
 <!-- Footer -->

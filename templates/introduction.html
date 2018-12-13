@@ -74,7 +74,7 @@
   </style>
     <script>
     $(document).ready(function() {
-        var scrollBottom = $(window).height() - 20;
+        var scrollBottom = $('#bodydiv').offset().top - ($('.navbar').height() + 15);
         $(".scroll").on('click', function() {
             console.log('hello');
             $('html, body').animate({scrollTop: scrollBottom}, 1000, 'swing');
